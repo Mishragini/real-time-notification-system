@@ -3,9 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import { signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 const WebSocketComponent: React.FC = () => {
+  const session = useSession();
   const { toast } = useToast();
   const [users, setUsers] = useState<string[]>([]);
   const [you, setYou] = useState("");
@@ -41,6 +43,15 @@ const WebSocketComponent: React.FC = () => {
     ws.send(JSON.stringify({ method: "PING", to }));
   };
 
+  if(!session.data) {
+    return (
+      <div className='flex flex-col items-center justify-center h-full'>
+        <div>Not signed in!</div>
+        <Button variant="secondary" onClick={() => signIn()}>Sign in</Button>
+      </div>
+    )
+  }
+
   return (
     <div className="container p-4 mx-auto">
       <h1 className="text-3xl font-bold mb-4">Connected Users</h1>
@@ -50,7 +61,7 @@ const WebSocketComponent: React.FC = () => {
         {users.filter(user => user !== you).map((user, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
-              <CardTitle className="text-lg">User ID: {user}</CardTitle>
+              <CardTitle className="text-lg">User ID: <br/> {user}</CardTitle>
             </CardHeader>
             <CardContent>
               <Button 

@@ -1,7 +1,7 @@
 import WebSocket, { Server, WebSocketServer } from 'ws';
 import { UserManager } from './userManager';
 
-const wss = new WebSocketServer({ port : 8080 });
+const wss = new WebSocketServer({});
 
 let userList: string[] = []
 
