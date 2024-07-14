@@ -14,7 +14,7 @@ const WebSocketComponent: React.FC = () => {
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
 
     ws.onopen = () => console.log('WebSocket connection established');
     ws.onmessage = (event) => {
@@ -33,7 +33,7 @@ const WebSocketComponent: React.FC = () => {
 
     setWs(ws);
     return () => ws.close();
-  }, []);
+  }, [toast]);
 
   const sendPing = (to?: string) => {
     if (!ws) {
